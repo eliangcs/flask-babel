@@ -152,7 +152,8 @@ class Babel(object):
 
         .. versionadded:: 0.6
         """
-        dirname = os.path.join(self.app.root_path, 'translations')
+        trans_dir = self.app.config.get('BABEL_TRANSLATION_DIR', 'translations')
+        dirname = os.path.join(self.app.root_path, trans_dir)
         if not os.path.isdir(dirname):
             return []
         result = []
@@ -192,7 +193,8 @@ def get_translations():
         return None
     translations = getattr(ctx, 'babel_translations', None)
     if translations is None:
-        dirname = os.path.join(ctx.app.root_path, 'translations')
+        trans_dir = ctx.app.config.get('BABEL_TRANSLATION_DIR', 'translations')
+        dirname = os.path.join(ctx.app.root_path, trans_dir)
         translations = support.Translations.load(dirname, [get_locale()])
         ctx.babel_translations = translations
     return translations
@@ -386,7 +388,7 @@ def _date_format(formatter, obj, format, rebase, **extra):
 
 def format_number(number):
     """Return the given number formatted for the locale in request
-    
+
     :param number: the number to format
     :return: the formatted number
     :rtype: unicode
